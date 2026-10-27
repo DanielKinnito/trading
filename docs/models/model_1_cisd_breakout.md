@@ -1,14 +1,16 @@
 # Model 1: CISD Breakout Close Entry
 
-<span class="badge-bullish">High Probability</span>
-<span class="badge-neutral">Confirmation Style</span>
-<span class="badge-neutral">Win-Rate: 70%+</span>
+<span class="tt-badge-bull">High Probability</span>
+<span class="tt-badge-neutral">Confirmation Style</span>
+<span class="tt-badge-neutral">Win-Rate: 70%+</span>
 
 > *"I refuse to guess the bottom. I want the algorithm to prove to me that buyers have taken control before I risk capital."*
 
 ---
 
 ## Visual Setup Schematic
+
+Below is the photorealistic chart breaking down Model 1 execution with exact benchmark origin alignment and confirmed candle body close:
 
 ![Model 1 CISD Breakout Close](../assets/images/models/model1_cisd_breakout.png)
 <div class="image-caption">Figure M1.1: Complete anatomical breakdown of Model 1 execution on confirmed candle body close above CISD.</div>
@@ -17,14 +19,14 @@
 
 ## 1. What You See on the Indicator
 
-When you have the **Fractal Model Pro+ [v6]** indicator on your chart, Model 1 presents the following visual sequence:
+When running the **Fractal Model Pro+ [v6]** indicator on your chart, Model 1 presents the following visual sequence:
 
-1. **C1 Range Marked**: Gray/neutral dotted bounds marking prior session or swing high/low.
-2. **C2 Sweep Detected**: Price wicks past C1, and the indicator places a red label `C2` at the extreme.
-3. **CISD Benchmark Line Appears**: A solid horizontal line is projected across the chart:
-    - **Blue Line**: Bullish CISD benchmark level (Open of the down-close candle series).
-    - **Red Line**: Bearish CISD benchmark level (Open of the up-close candle series).
-4. **Dashboard State**: The bottom-right table changes status from `C2 Sweep` to `Watching CISD Level`.
+1. **C1 Range Marked**: Dotted bounds marking prior session or swing high/low.
+2. **C2 Sweep Detected**: Price wicks past C1 into an HTF discount POI, and the indicator places a label at the extreme.
+3. **CISD Benchmark Line Appears**: A solid horizontal ray originates strictly from the **`Open` of the first opposing candle** that led into the C2 extreme:
+    - **Blue Line**: Bullish CISD benchmark level (`Open` of the first down-close candle into C2 low).
+    - **Red Line**: Bearish CISD benchmark level (`Open` of the first up-close candle into C2 high).
+4. **Dashboard State**: The live HUD changes status from `C2 Sweep` to `Watching CISD Level`.
 
 ---
 
@@ -32,7 +34,7 @@ When you have the **Fractal Model Pro+ [v6]** indicator on your chart, Model 1 p
 
 ### Bullish Execution:
 1. **Pre-condition**: C2 sweeps sellside liquidity (SSL) into an HTF Point of Interest (FVG or Orderblock) and prints a rejection wick.
-2. **Watch the Line**: Identify the blue CISD horizontal line.
+2. **Watch the Benchmark Origin**: Verify the blue CISD line originates at the `Open` of the first bearish candle into the C2 low.
 3. **Wait for Candle Close**: Watch the 1-minute candle timer countdown to `0:00`.
 4. **Trigger**: The candle **body must close strictly ABOVE the blue line**.
 5. **Entry**:
@@ -46,12 +48,12 @@ When you have the **Fractal Model Pro+ [v6]** indicator on your chart, Model 1 p
 
 ---
 
-## 3. Real TradingView Chart Example
+## 3. Wick Rejection Trap vs. Confirmed Close
 
-Below is a live chart showing Model 1 in action:
+Below is the technical deep dive demonstrating why wick probes fail and how true body close confirmation looks on institutional orderflow:
 
-![CISD Breakout Candle Close](../assets/images/charts/cisd_breakout_candle_c3_retest.png)
-<div class="image-caption">Figure M1.2: Candle body close confirmation through the blue CISD line.</div>
+![CISD Deep Dive Anatomy](../assets/images/charts/cisd_anatomy_deep_dive.png)
+<div class="image-caption">Figure M1.2: Scenario A (Wick Rejection Trap / Invalid) vs Scenario B (Solid Candle Body Close / Confirmed CISD).</div>
 
 ---
 

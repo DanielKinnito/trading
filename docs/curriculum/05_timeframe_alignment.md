@@ -10,9 +10,9 @@ The Fractal Model relies on a strict **3-tier timeframe hierarchy**:
 
 ```mermaid
 graph TD
-    A[Higher Timeframe HTF] -->|Determines Bias & Macro Draw on Liquidity| B[Middle Timeframe MTF]
-    B -->|Identifies C1/C2 Setup & Dealing Range| C[Lower Timeframe LTF]
-    C -->|Executes on CISD, T-Spot & C3 Expansion| D[Entry & Execution]
+    A["Higher Timeframe (HTF)<br/>1D / 4H / 1H"] -->|Determines Directional Bias & Macro Draw on Liquidity| B["Middle Timeframe (MTF)<br/>4H / 1H / 15m"]
+    B -->|Identifies C1 Reference Range & C2 Liquidity Sweep| C["Lower Timeframe (LTF)<br/>15m / 5m / 1m"]
+    C -->|Executes on CISD Breakout, 50% T-Spot & C3 Expansion| D["Sniper Entry & Risk-Controlled Execution"]
 ```
 
 ---
@@ -35,20 +35,20 @@ To avoid chart clutter and conflicting signals, the indicator provides pre-confi
 
 Algorithmic liquidity delivery only operates during specific time windows anchored to **New York Time (`America/New_York`)**:
 
-```
-00:00 NY Time: New York Midnight Open (Key algorithmic benchmark)
-02:00 – 05:00 NY Time: London Open Killzone (EURUSD, GBPUSD prime volatility)
-08:30 – 11:00 NY Time: New York AM Killzone (NQ, ES, Gold index opens)
-09:50 – 10:10 NY Time: Key Morning Macro (High probability reversal/expansion pivot)
-13:30 – 16:00 NY Time: New York PM Killzone (Afternoon trend run & settlement)
-```
+| Session Window | New York Time (EST) | Primary Assets | Algorithmic Characteristic |
+| :--- | :--- | :--- | :--- |
+| **Midnight Open** | **00:00 NY** | All Assets | Key algorithmic baseline for daily open price delivery |
+| **London Open Killzone** | **02:00 – 05:00 NY** | EURUSD, GBPUSD | High probability Asian range sweep & daily low/high formation |
+| **New York AM Killzone** | **08:30 – 11:00 NY** | NQ1!, ES1!, Gold | Equities cash open (09:30) volatility & institutional expansions |
+| **Key Morning Macro** | **09:50 – 10:10 NY** | Indices & FX | Highest win-rate 20-minute reversal & continuation window |
+| **New York PM Killzone** | **13:30 – 16:00 NY** | Indices | Afternoon trend continuation into cash market settlement |
 
 ### The Daylight Saving Time (DST) 1-Week Shift
 During the 1-week desynchronization period in late October / early November when Europe ends British Summer Time (BST) / Central European Summer Time (CEST) before the United States falls back:
 
 !!! warning "DST Desynchronization Week Shift Rules"
     - **London Killzone in NY Time**: Shifts from 02:00–05:00 to **03:00–06:00 NY Time** (or 03:00–07:00).
-    - **London Killzone in East Africa / Ethiopia Time (UTC+3)**: Remains constant at **09:00 AM – 12:00 PM local time** (formerly 08:00 AM).
+    - **London Killzone in East Africa / Ethiopia Time (UTC+3)**: Shifts to **09:00 AM – 12:00 PM local time** (formerly 08:00 AM).
     - **NY AM Cash Open (09:30 NY)**: Opens at **04:30 PM East Africa / Ethiopia Time**.
     - **Indicator Setup**: On TradingView, keep chart timezone set to `UTC-4` (or `America/New_York`) so session boxes and timestamps align automatically.
 
@@ -76,11 +76,14 @@ In discretionary trading, deciding whether you are bullish or bearish can become
 
 A distinctive feature of our TradingView indicator is the **HTF Candle Projection cluster** drawn on the right-hand margin of the lower timeframe chart:
 
+![HTF Projection on Lower Timeframe Chart](../assets/images/indicator/indicator_interface_overview.png)
+<div class="image-caption">Figure 5.1: 15m HTF candle projection cluster rendered directly on the right margin of the 1m execution chart with live countdown timer.</div>
+
 * Renders the last 4 to 10 completed HTF candles directly alongside active LTF price.
 * Shows you at a glance:
     * Current HTF candle open line (`showHtfOpen`).
     * Time remaining until the current HTF candle closes (`showHtfTimer`).
     * Day of the week stamps (`showHtfStamps`).
 
-!!! tip "Why This Matters"
+!!! tip "Why This Eliminates Multitasking"
     You never have to leave your 1-minute or 5-minute execution chart to know the exact status, body size, and wick length of the 1-hour or 4-hour candle!

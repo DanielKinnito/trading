@@ -17,21 +17,23 @@ In our suite:
 
 ## 2. Step-by-Step Alert Configuration
 
+Below is the clean TradingView alert setup modal showing the exact dropdown selections required:
+
 ![TradingView Alert Creation Modal](../assets/images/indicator/tradingview_alert_dialog.png)
-<div class="image-caption">Figure A.1: Correct TradingView alert setup selecting "TTFM- ICT2023" and "Any alert() function call".</div>
+<div class="image-caption">Figure A.1: Correct TradingView alert setup selecting "TTrades Fractal Model Pro+ [v6]" and "Any alert() function call".</div>
 
 ### The 4-Step Setup:
 
 1. **Open Alert Window**:
     - Right-click anywhere on your execution chart and select **Add alert...** (or press <kbd>Alt</kbd> + <kbd>A</kbd>).
 2. **Select Indicator Condition**:
-    - In the top dropdown under **Condition**, select **TTFM- ICT2023** (or `TTrades Fractal Model [Pro+]`).
+    - In the top dropdown under **Condition**, select **TTrades Fractal Model Pro+ [v6]**.
 3. **Select Any alert() function call**:
     - In the secondary dropdown right below Condition, select **`Any alert() function call`**.
     - *(Do not select individual price thresholds; the script automatically handles condition logic via native v6 alert calls)*.
 4. **Interval & Expiration**:
-    - Set **Interval** to `Same as chart` (e.g. 1 minute).
-    - Set **Expiration** to the maximum allowed date.
+    - Set **Interval** to `Once Per Bar Close`.
+    - Set **Expiration** to `Open-Ended` (permanent).
 5. **Notifications**:
     - Enable **Notify in app** (push notifications to iOS / Android TradingView app).
     - Enable **Show pop-up** (on desktop browser).
@@ -44,10 +46,12 @@ In our suite:
 
 When the alert is active, you will receive notifications for:
 
-- :bell: **`[TTFM] Bullish CISD Confirmed`**: Candle body closed above the benchmark line; entry confirmed.
-- :bell: **`[TTFM] Bearish CISD Confirmed`**: Candle body closed below the benchmark line; entry confirmed.
-- :bell: **`[TTFM] C3 T-Spot Mitigated`**: Price has wicked into the 50% discount box.
-- :bell: **`[TTFM] Target -2.0 Reached`**: Take partial profits and move stop loss to break-even.
+| Alert Type | Notification Message | Trader Action |
+| :--- | :--- | :--- |
+| **Bullish CISD** | `[TTFM] Bullish CISD Confirmed` | Candle body closed above benchmark line; execute Long |
+| **Bearish CISD** | `[TTFM] Bearish CISD Confirmed` | Candle body closed below benchmark line; execute Short |
+| **T-Spot Mitigated** | `[TTFM] C3 T-Spot Mitigated` | Price wicked into 50% discount box; limit order filled |
+| **Target Reached** | `[TTFM] Target -2.0 Reached` | Take partial profits (80%) and move Stop Loss to BE |
 
 ---
 
@@ -57,11 +61,11 @@ With alerts enabled, you do **NOT** have to stare at 1-minute candles for hours:
 
 ```mermaid
 graph TD
-    A[Alarm sounds at 08:30 / London Open] --> B[Open TradingView Chart]
-    B --> C[Verify C1 Range & HTF Bias]
-    C --> D[Turn on Indicator Alerts]
-    D --> E[Step away or relax]
-    E -->|Alert Chimes!| F[Check Alert: CISD Body Close]
-    F --> G[Execute Entry & Set Pre-calculated SL/TP]
-    G --> H[Let the Trade Run to Target]
+    A["Alarm sounds at London Open / NY AM"] --> B["Open TradingView Chart"]
+    B --> C["Verify C1 Range & HTF Bias"]
+    C --> D["Activate Indicator Alert: Any alert() call"]
+    D --> E["Step away or relax"]
+    E -->|Chime Sounds!| F["Check Alert: Confirmed CISD Body Close"]
+    F --> G["Execute Entry & Place Pre-calculated SL/TP"]
+    G --> H["Let the Trade Run to Target"]
 ```

@@ -1,14 +1,16 @@
 # Model 2: T-Spot Equilibrium Limit Entry
 
-<span class="badge-bullish">Maximum Risk-to-Reward</span>
-<span class="badge-neutral">Limit Order Style</span>
-<span class="badge-neutral">RR: 1:4 to 1:8+</span>
+<span class="tt-badge-bull">Maximum Risk-to-Reward</span>
+<span class="tt-badge-neutral">Limit Order Style</span>
+<span class="tt-badge-neutral">RR: 1:4 to 1:8+</span>
 
 > *"I refuse to chase green candles. I want to buy at a wholesale discount inside the manipulation wick."*
 
 ---
 
 ## Visual Setup Schematic
+
+Below is the photorealistic chart breaking down Model 2 execution with passive limit fill at the wholesale 50% T-Spot equilibrium:
 
 ![Model 2 T-Spot Equilibrium Limit](../assets/images/models/model2_tspot_limit.png)
 <div class="image-caption">Figure M2.1: Complete anatomical breakdown of Model 2 limit execution inside the 50% Equilibrium Discount Box.</div>
@@ -17,14 +19,14 @@
 
 ## 1. What You See on the Indicator
 
-When you have the **Fractal Model Pro+ [v6]** indicator running with `showTSpot = true`:
+When running the **Fractal Model Pro+ [v6]** indicator with `showTSpot = true`:
 
 1. **C2 Sweep Completed**: The C2 manipulation candle finishes its sweep.
 2. **C3 Opens**: A shaded box appears projecting forward:
     - **Top of Box**: Opening price of C3.
     - **Dotted Center Line**: Exact **50.00% Equilibrium** of the C2 manipulation swing (`[C2 High + C2 Low] / 2`).
-    - **Bottom of Box (Bullish)**: Discount zone boundary.
-3. **Dashboard State**: Bottom-right table displays `C3 T-Spot Active`.
+    - **Bottom of Box (Bullish)**: Wholesale discount zone boundary.
+3. **Dashboard State**: Bottom-right HUD displays `C3 T-Spot Active`.
 
 ---
 
@@ -46,12 +48,12 @@ When you have the **Fractal Model Pro+ [v6]** indicator running with `showTSpot 
 
 ---
 
-## 3. Real TradingView Chart Example
+## 3. Dealing Range Equilibrium Mechanics
 
-Here is an authentic capture showing the 50.00% equilibrium discount area plotted by the indicator:
+Below is the photorealistic chart showing how the 50.00% equilibrium separates institutional discount accumulation from premium distribution:
 
-![Equilibrium and T-Spot 50% Box](../assets/images/charts/equilibrium_tspot_box.png)
-<div class="image-caption">Figure M2.2: Live chart showing 0.00%, 50.00% Equilibrium (T-Spot), and 100.00% C2 swing low.</div>
+![Dealing Range and 50% Equilibrium](../assets/images/charts/dealing_range_premium_discount.png)
+<div class="image-caption">Figure M2.2: Dealing Range 50% equilibrium threshold separating discount buy-programs from premium sell-programs.</div>
 
 ---
 

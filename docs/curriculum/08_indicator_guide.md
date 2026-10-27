@@ -6,7 +6,7 @@
 
 ## 1. Indicator Suite Architecture
 
-The repository contains four dedicated **Pine Script v6** indicators engineered for zero repainting and execution clarity:
+The repository contains modular **Pine Script v6** indicators engineered for zero repainting and execution clarity:
 
 1. **`fractal_model.pine`**: The complete TTrades Fractal Model [Pro+] v6 indicator (C1-C4 detection, CISD lines, T-Spot boxes, HTF projections, Fibonacci extensions, status dashboard).
 2. **`htf_suite.pine`**: Standalone multi-timeframe candle projector displaying 15m, 1H, 4H, and Daily candles on your execution chart.
@@ -22,7 +22,7 @@ Follow these simple steps to install the indicator in under 2 minutes:
 1. Open your chart on [TradingView](https://www.tradingview.com/).
 2. At the bottom of the screen, click the **Pine Editor** tab.
 3. If an existing script is open, click **Open** $\rightarrow$ **New indicator**.
-4. Open the source file [`scripts/indicators/fractal_model.pine`](https://github.com/DanielKinnito/trading/blob/main/scripts/indicators/fractal_model.pine) in this repository and copy all code.
+4. Open the source file [`scripts/indicators/fractal_model.pine`](https://github.com/DanielKinnito/trading/blob/master/scripts/indicators/fractal_model.pine) in this repository and copy all code.
 5. Paste the code into the Pine Editor, replacing any existing template text.
 6. Click **Save** and then click **Add to chart**.
 
@@ -53,17 +53,17 @@ Double-click the indicator title on your chart (or click the Gear icon) to acces
 The indicator features native `alert()` integration that triggers instantly on confirmed candle closes:
 
 ![TradingView Alert Creation Modal](../assets/images/indicator/tradingview_alert_dialog.png)
-<div class="image-caption">Figure 8.2: Authentic TradingView alert modal showing Condition set to "TTFM- ICT2023" and "Any alert() function call".</div>
+<div class="image-caption">Figure 8.2: Authentic TradingView alert modal showing Condition set to "TTrades Fractal Model Pro+ [v6]" and "Any alert() function call".</div>
 
 ### How to Configure the Alert:
 1. Right-click on the chart and select **Add alert...** (or press <kbd>Alt</kbd> + <kbd>A</kbd>).
-2. Under **Condition**, select **TTFM- ICT2023** (or the indicator name).
+2. Under **Condition**, select **TTrades Fractal Model Pro+ [v6]**.
 3. In the second dropdown directly below Condition, select **`Any alert() function call`**.
-4. Under **Interval**, leave it as **Same as chart** (e.g. 1 minute).
+4. Under **Interval**, leave it as **Once Per Bar Close**.
 5. Under **Notifications**, check:
-    * :white_check_mark: **Notify in app**
-    * :white_check_mark: **Show pop-up**
-    * :white_check_mark: **Play sound**
+    - ✓ **Notify in app**
+    - ✓ **Show pop-up**
+    - ✓ **Play sound**
 6. Click **Create**.
 
 !!! tip "Relaxed Monitoring"

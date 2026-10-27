@@ -10,20 +10,19 @@ A C1 sweep and C2 pivot cannot occur in a vacuum; they must interact with an ins
 
 ```mermaid
 graph TD
-    A[HTF Liquidity Sweep or POI Tap] --> B[C2 Wick forms inside POI]
-    B --> C[T-Spot Box Calculated: 50% Equilibrium]
-    C --> D[LTF CISD Confirms Trend Shift]
+    A["HTF Liquidity Sweep or POI Tap<br/>(15m / 1H / 4H FVG or OB)"] --> B["C2 Wick forms inside POI<br/>(Retail Stop Run Complete)"]
+    B --> C["T-Spot Box Calculated<br/>(50% Equilibrium Threshold)"]
+    C --> D["LTF CISD Confirms Trend Shift<br/>(Body Closes Beyond Benchmark)"]
 ```
 
 ### High-Probability POIs in TTFM:
 1. **Fair Value Gap (FVG)**:
     * 3-candle imbalance (BISI or SIBI).
-    * Highest probability when C2 taps into the **Consequent Encroachment (50% CE)** of an HTF FVG.
+    * Highest probability occurs when C2 taps into the **Consequent Encroachment (50% CE)** of an HTF FVG.
 2. **Inverse Fair Value Gap (IFVG)**:
-    * A previously broken FVG that flips into supporting or resisting price.
+    * A previously broken FVG that flips into supporting or resisting price delivery.
 3. **Orderblock (OB) & Breaker Block (BB)**:
-    * An OB that previously formed after a liquidity run.
-    * A Breaker Block that previously took liquidity before an impulsive market structure shift.
+    * An institutional candle that previously initiated a liquidity sweep before an impulsive market structure shift.
 
 ---
 
@@ -43,39 +42,35 @@ The T-Spot zone is calculated by taking the relationship between:
     c3_open = open[0]  // at the start of C3
     ```
 3. **The T-Spot Entry Zone**:
-    * **For Bullish Setups**: The box bounded between `c3_open` and `c2_wick_midpoint` (or lower boundary down to the 50% discount of the sweep leg).
-    * **For Bearish Setups**: The box bounded between `c3_open` and `c2_wick_midpoint` (or upper boundary up to the 50% premium of the sweep leg).
+    * **For Bullish Setups**: The box bounded between `c3_open` and `c2_wick_midpoint` (discount zone below 50% of the sweep leg).
+    * **For Bearish Setups**: The box bounded between `c3_open` and `c2_wick_midpoint` (premium zone above 50% of the sweep leg).
 
-```
-   Bullish T-Spot Schematic:
-   ─────────────────────────────────────────────────── C3 Open
-   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-   ░░░░░░░░░░░░░░░░░ THE T-SPOT BOX ░░░░░░░░░░░░░░░░░   <-- Best Limit Entry Zone
-   ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-   ─────────────────────────────────────────────────── C2 Wick Midpoint (50% EQ)
-   
-   ═══════════════════════════════════════════════════ C2 Extreme Low (Stop Loss)
-```
+| T-Spot Component | Level | Institutional Function |
+| :--- | :--- | :--- |
+| **Top of T-Spot Box** | `c3_open` | C3 Open Price (Transition into manipulation probe) |
+| **Equilibrium Line** | `50.0% T-Spot` | Passive limit order price level |
+| **Base of T-Spot Box** | `c2_wick_midpoint` | Maximum allowable discount for a healthy expansion |
+| **Stop Loss Invalidation** | `c2_extreme ± 1 tick` | Setup failure point; orders cancelled if pierced |
 
 ---
 
-## 3. Real Chart Illustration of the T-Spot Box
+## 3. Real Chart Illustration of the 50% T-Spot Execution
 
-Here is an authentic capture showing the T-Spot equilibrium box calculated on the chart, shading the discount area green and premium area red:
+Below is the photorealistic chart showing Model 2 executed via a passive limit order at the **50% T-Spot Equilibrium**:
 
-![T-Spot 50% Box](../assets/images/charts/equilibrium_tspot_box.png)
-<div class="image-caption">Figure 4.1: Live chart showing 0.00%, 50.00% Equilibrium (T-Spot), and 100.00% C2 swing low.</div>
+![50% T-Spot Equilibrium Limit Execution](../assets/images/models/model2_tspot_limit.png)
+<div class="image-caption">Figure 4.1: EURUSD 1m chart showing the 50% T-Spot box, wholesale discount (<50%), passive limit fill, and 1:5.2 R:R expansion.</div>
 
 ---
 
 ## 4. Why Price Wicks into the T-Spot
 
-When C3 opens, retail breakout traders often chase the move immediately. However, institutional algorithms follow the **Power of 3 (Accumulation, Manipulation, Distribution)**:
+When C3 opens, novice traders frequently chase the move immediately with aggressive market orders. However, institutional algorithms follow the **Power of 3 (Accumulation, Manipulation, Distribution)**:
 
 1. **Open**: C3 opens.
 2. **Manipulation (Wick into T-Spot)**:
-    * In a bullish setup, price drops *below* the open into discount to tap the **T-Spot** (rebalancing the micro FVG or testing the C2 wick midpoint).
-    * This shakes out early breakout buyers and fills institutional long limit orders at a superior average price.
+    * In a bullish setup, price drops *below* the open into discount to tap the **50% T-Spot** (rebalancing the micro FVG or testing the C2 wick midpoint).
+    * This shakes out early breakout buyers and fills institutional long limit orders at a superior wholesale discount.
 3. **Distribution (Body Expansion)**:
     * Once filled inside the T-Spot, price accelerates away from the open and closes near its extreme.
 

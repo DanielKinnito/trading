@@ -13,7 +13,7 @@
 
 ## 2. Pine Script v6 Scripts in This Repository
 
-This repository includes four modular indicators located in [`scripts/indicators/`](https://github.com/DanielKinnito/trading/tree/main/scripts/indicators):
+This repository includes modular indicators located in [`scripts/indicators/`](https://github.com/DanielKinnito/trading/tree/master/scripts/indicators):
 
 | Script | Filename | Purpose |
 | :--- | :--- | :--- |
@@ -32,11 +32,11 @@ sequenceDiagram
     participant GitHub
     participant TradingView
     
-    User->>GitHub: Copy raw Pine Script code
+    User->>GitHub: Copy raw Pine Script v6 code
     User->>TradingView: Open Pine Editor tab at bottom of chart
     User->>TradingView: Click "New Indicator" & paste code
     User->>TradingView: Click "Save" & "Add to chart"
-    TradingView-->>User: Plots C1-C4 labels, CISD lines & Dashboard
+    TradingView-->>User: Plots C1-C4 labels, CISD lines & Dashboard HUD
 ```
 
 1. Navigate to the indicator source page (e.g., [Fractal Model Pro+](fractal_model.md)).
@@ -48,10 +48,10 @@ sequenceDiagram
 ## 4. Default Visual Layout
 
 Once loaded, the indicator renders:
-- Solid blue/red **CISD dynamic benchmark lines**.
-- Shaded green/red **T-Spot equilibrium boxes**.
-- Real-time **Dashboard Table** in the bottom-right corner.
-- Right-hand margin **Higher Timeframe Candle Projection**.
+- Solid blue/red **CISD dynamic benchmark lines** originating strictly from opposing candle opens.
+- Shaded green/red **T-Spot equilibrium boxes** at 50% retracement.
+- Real-time **Dashboard Table** in the corner displaying live phase and CISD status.
+- Right-hand margin **Higher Timeframe Candle Projection** with countdown timer.
 
-![TradingView Indicator Chart](../assets/images/charts/nas100_1m_15m_c2_c3_sequence.png)
-<div class="image-caption">Figure I.1: Clean light-mode TradingView chart running Fractal Model Pro+.</div>
+![TradingView Indicator Interface Overview](../assets/images/indicator/indicator_interface_overview.png)
+<div class="image-caption">Figure I.1: Clean light-mode TradingView chart running Fractal Model Pro+ with live HTF projection cluster.</div>

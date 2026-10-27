@@ -1,8 +1,8 @@
 # Session Liquidity Suite (v6)
 
-<span class="badge-bullish">Pine Script v6</span>
-<span class="badge-neutral">Session Automation</span>
-<span class="badge-neutral">Zero Repaint</span>
+<span class="tt-badge-bull">Pine Script v6</span>
+<span class="tt-badge-neutral">Session Automation</span>
+<span class="tt-badge-bull">Zero Repaint</span>
 
 > **Automated session high/low tracking, range boxes, and liquidity sweep detection for Asian, London, and New York sessions.**
 
@@ -23,15 +23,23 @@ Institutions operate on fixed session liquidity cycles. The **Liquidity Suite** 
 - **Previous Day High / Low (PDH / PDL)**:
     - Automatically updates previous day extremes as key external draw on liquidity (DOL).
 
+Below is the photorealistic chart showing London session sweeping the Asian low on EURUSD into a 50% T-Spot equilibrium:
+
+![London Session Asian Low Sweep](../assets/images/models/model2_tspot_limit.png)
+<div class="image-caption">Figure L.1: London Open Asian Low sweep on EURUSD with 50% T-Spot limit execution.</div>
+
 ---
 
 ## 2. Liquidity Sweep Alerts
 
 The indicator can automatically alert you whenever a session high or low is swept:
 
-- `Asian Low Swept`: Fires when price wicks below the Asian range low.
-- `Asian High Swept`: Fires when price wicks above the Asian range high.
-- `London High/Low Swept`: Fires when New York price purges London session liquidity.
+| Alert Trigger | Market Condition | Execution Meaning |
+| :--- | :--- | :--- |
+| `Asian Low Swept` | Price wicks below Asian range low into discount | Potential C2 low forming; watch for Bullish CISD |
+| `Asian High Swept` | Price wicks above Asian range high into premium | Potential C2 high forming; watch for Bearish CISD |
+| `London Low Swept` | NY AM purges London session low | London low Judas swing purged; watch for NY AM reversal |
+| `London High Swept` | NY AM purges London session high | London high Judas swing purged; watch for NY AM reversal |
 
 ---
 
@@ -43,4 +51,4 @@ The source code is located in:
 scripts/indicators/liquidity_suite.pine
 ```
 
-[:octicons-mark-github-16: View Raw Script on GitHub](https://github.com/DanielKinnito/trading/blob/main/scripts/indicators/liquidity_suite.pine)
+[View Raw Script on GitHub →](https://github.com/DanielKinnito/trading/blob/master/scripts/indicators/liquidity_suite.pine)
