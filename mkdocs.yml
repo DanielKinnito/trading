@@ -1,0 +1,100 @@
+site_name: TTrades Fractal Model & Algorithmic Suite
+site_description: Complete guide, curriculum, and TradingView Pine Script v6 indicators for the TTrades Fractal Model.
+site_author: DanielKinnito
+site_url: https://DanielKinnito.github.io/trading/
+repo_url: https://github.com/DanielKinnito/trading
+repo_name: DanielKinnito/trading
+
+theme:
+  name: material
+  language: en
+  palette:
+    # Dedicated light mode by default
+    scheme: default
+    primary: indigo
+    accent: indigo
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.instant
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+plugins:
+  - search:
+      lang: en
+      separator: '[\s\-,.:]+'
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.arithmatex:
+      generic: true
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+exclude_docs: |
+  ttrades_fractal_model/**
+  superpowers/**
+  dani course.pdf
+
+nav:
+  - Home: index.md
+  - Core Curriculum:
+      - Overview & Architecture: curriculum/00_overview.md
+      - 1. Foundations & Market Delivery: curriculum/01_foundational_concepts.md
+      - 2. The C1-C2-C3-C4 Sequence: curriculum/02_fractal_sequence.md
+      - 3. Change in State of Delivery (CISD): curriculum/03_cisd_deep_dive.md
+      - 4. Points of Interest & T-Spot: curriculum/04_poi_and_tspot.md
+      - 5. Timeframe Alignment & Matrix: curriculum/05_timeframe_alignment.md
+      - 6. Entry Models & Execution Playbook: curriculum/06_entry_models.md
+      - 7. Targets, Risk & Invalidation: curriculum/07_risk_and_targets.md
+      - 8. TradingView Indicator Setup & Alerts: curriculum/08_indicator_guide.md
+  - Entry Models Deep Dive:
+      - Model 1 (CISD Breakout Close): models/model_1_cisd_breakout.md
+      - Model 2 (T-Spot Equilibrium Limit): models/model_2_tspot_limit.md
+      - Model 3 (LTF Micro CISD Sniper): models/model_3_micro_cisd.md
+      - Model 4 (C4 Trend Continuation): models/model_4_c4_continuation.md
+  - Indicator Suite:
+      - Installation & Quickstart: indicators/quickstart.md
+      - Fractal Model Pro+ (v6): indicators/fractal_model.md
+      - HTF Candle Suite: indicators/htf_suite.md
+      - Session Liquidity Engine: indicators/liquidity_suite.md
+      - Alert Setup Guide: indicators/alerts_guide.md
+  - Cheatsheet & References:
+      - Session Times & DST Shifts: cheatsheet/sessions_and_rules.md
+      - Timeframe Matrix: cheatsheet/timeframe_matrix.md
+      - Common Mistakes & Invalidation: cheatsheet/common_mistakes.md

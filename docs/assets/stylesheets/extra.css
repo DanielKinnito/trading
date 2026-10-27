@@ -1,0 +1,72 @@
+/* Custom CSS for TTrades Fractal Model Light Mode */
+
+:root {
+  --md-primary-fg-color: #2563eb;
+  --md-primary-fg-color--light: #3b82f6;
+  --md-primary-fg-color--dark: #1d4ed8;
+  --md-accent-fg-color: #2563eb;
+}
+
+/* Light mode card enhancements */
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Chart and visual image styling */
+.md-typeset img {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  margin: 1.2em 0;
+  max-width: 100%;
+  display: block;
+}
+
+/* Center image captions */
+.image-caption {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-top: -0.6em;
+  margin-bottom: 1.5em;
+  font-style: italic;
+}
+
+/* Trading badges */
+.badge-bullish {
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+.badge-bearish {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+.badge-neutral {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+/* Code block tweaks */
+.md-typeset pre > code {
+  font-size: 0.82rem;
+  border-radius: 6px;
+}
