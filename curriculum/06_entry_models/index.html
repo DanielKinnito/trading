@@ -1,0 +1,1850 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Complete guide, curriculum, and TradingView Pine Script v6 indicators for the TTrades Fractal Model.">
+      
+      
+        <meta name="author" content="DanielKinnito">
+      
+      
+        <link rel="canonical" href="https://DanielKinnito.github.io/trading/curriculum/06_entry_models/">
+      
+      
+        <link rel="prev" href="../05_timeframe_alignment/">
+      
+      
+        <link rel="next" href="../07_risk_and_targets/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>6. Entry Models & Execution Playbook - TTrades Fractal Model & Algorithmic Suite</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chapter-06-entry-models-execution-playbook" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="TTrades Fractal Model &amp; Algorithmic Suite" class="md-header__button md-logo" aria-label="TTrades Fractal Model & Algorithmic Suite" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            TTrades Fractal Model & Algorithmic Suite
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              6. Entry Models & Execution Playbook
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/DanielKinnito/trading" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    DanielKinnito/trading
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00_overview/" class="md-tabs__link">
+          
+  
+  
+  Core Curriculum
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../models/model_1_cisd_breakout/" class="md-tabs__link">
+          
+  
+  
+  Entry Models Deep Dive
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../indicators/quickstart/" class="md-tabs__link">
+          
+  
+  
+  Indicator Suite
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../cheatsheet/sessions_and_rules/" class="md-tabs__link">
+          
+  
+  
+  Cheatsheet & References
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="TTrades Fractal Model &amp; Algorithmic Suite" class="md-nav__button md-logo" aria-label="TTrades Fractal Model & Algorithmic Suite" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    TTrades Fractal Model & Algorithmic Suite
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/DanielKinnito/trading" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    DanielKinnito/trading
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Curriculum
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Core Curriculum
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01_foundational_concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Foundations & Market Delivery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02_fractal_sequence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. The C1-C2-C3-C4 Sequence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03_cisd_deep_dive/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Change in State of Delivery (CISD)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04_poi_and_tspot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Points of Interest & T-Spot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05_timeframe_alignment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Timeframe Alignment & Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Entry Models & Execution Playbook
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Entry Models & Execution Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-executive-overview-setup-pre-conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Executive Overview &amp; Setup Pre-Conditions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-model-1-the-cisd-body-break-close-momentum-confirmation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Model 1: The CISD Body Break &amp; Close (Momentum Confirmation)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Model 1: The CISD Body Break &amp; Close (Momentum Confirmation)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-model-2-the-50-t-spot-limit-entry-wholesale-discount-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Model 2: The 50% T-Spot Limit Entry (Wholesale Discount Hunter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Model 2: The 50% T-Spot Limit Entry (Wholesale Discount Hunter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-model-3-the-micro-structure-sniper-dual-timeframe-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Model 3: The Micro-Structure Sniper (Dual Timeframe Precision)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Model 3: The Micro-Structure Sniper (Dual Timeframe Precision)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-model-4-the-c4-trend-continuation-entry-the-second-chance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Model 4: The C4 Trend Continuation Entry (The Second Chance)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Model 4: The C4 Trend Continuation Entry (The Second Chance)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-master-comparison-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Master Comparison Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07_risk_and_targets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Targets, Risk & Invalidation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08_indicator_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. TradingView Indicator Setup & Alerts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entry Models Deep Dive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Entry Models Deep Dive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/model_1_cisd_breakout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model 1 (CISD Breakout Close)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/model_2_tspot_limit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model 2 (T-Spot Equilibrium Limit)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/model_3_micro_cisd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model 3 (LTF Micro CISD Sniper)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/model_4_c4_continuation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model 4 (C4 Trend Continuation)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indicator Suite
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Indicator Suite
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../indicators/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation & Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../indicators/fractal_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fractal Model Pro+ (v6)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../indicators/htf_suite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTF Candle Suite
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../indicators/liquidity_suite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session Liquidity Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../indicators/alerts_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alert Setup Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cheatsheet & References
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cheatsheet & References
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheatsheet/sessions_and_rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Session Times & DST Shifts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheatsheet/timeframe_matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timeframe Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cheatsheet/common_mistakes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Mistakes & Invalidation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-executive-overview-setup-pre-conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Executive Overview &amp; Setup Pre-Conditions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-model-1-the-cisd-body-break-close-momentum-confirmation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Model 1: The CISD Body Break &amp; Close (Momentum Confirmation)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Model 1: The CISD Body Break &amp; Close (Momentum Confirmation)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-model-2-the-50-t-spot-limit-entry-wholesale-discount-hunter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Model 2: The 50% T-Spot Limit Entry (Wholesale Discount Hunter)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Model 2: The 50% T-Spot Limit Entry (Wholesale Discount Hunter)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-model-3-the-micro-structure-sniper-dual-timeframe-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Model 3: The Micro-Structure Sniper (Dual Timeframe Precision)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Model 3: The Micro-Structure Sniper (Dual Timeframe Precision)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-model-4-the-c4-trend-continuation-entry-the-second-chance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Model 4: The C4 Trend Continuation Entry (The Second Chance)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Model 4: The C4 Trend Continuation Entry (The Second Chance)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-master-comparison-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Master Comparison Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="chapter-06-entry-models-execution-playbook">Chapter 06: Entry Models &amp; Execution Playbook<a class="headerlink" href="#chapter-06-entry-models-execution-playbook" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Core Curriculum</strong> | Previous: <a href="../05_timeframe_alignment/">Chapter 05: Timeframe Alignment</a> | Next: <a href="../07_risk_and_targets/">Chapter 07: Targets &amp; Risk</a></p>
+</blockquote>
+<hr />
+<h2 id="1-executive-overview-setup-pre-conditions">1. Executive Overview &amp; Setup Pre-Conditions<a class="headerlink" href="#1-executive-overview-setup-pre-conditions" title="Permanent link">&para;</a></h2>
+<p>Before looking for an entry trigger, the baseline market structure <strong>must already be confirmed</strong> on your chart:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Step</th>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Institutional Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>C1 Reference Range</strong></td>
+<td style="text-align: left;">Clear High (Buy-Side Liquidity) and Low (Sell-Side Liquidity) established.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>C2 Liquidity Sweep</strong></td>
+<td style="text-align: left;">C2 sweeps C1 extreme, taps an HTF POI, and closes back inside the range.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;"><strong>Directional Bias</strong></td>
+<td style="text-align: left;">Confirmed via HTF market structure or the indicator's Pro Auto Bias engine.</td>
+</tr>
+</tbody>
+</table>
+<p>Once the <code>C2</code> sweep occurs, you are preparing to trade the <strong>expansion</strong> (<code>C3</code> or continuation <code>C4</code>). Depending on market speed and your personal risk profile, the TTrades Fractal Model provides <strong>Four Distinct Entry Models</strong>.</p>
+<hr />
+<h2 id="2-model-1-the-cisd-body-break-close-momentum-confirmation">2. Model 1: The CISD Body Break &amp; Close (Momentum Confirmation)<a class="headerlink" href="#2-model-1-the-cisd-body-break-close-momentum-confirmation" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><em>"I refuse to guess the bottom. I want the algorithm to prove to me that buyers have taken control before I risk capital."</em></p>
+</blockquote>
+<p><img alt="Model 1 CISD Breakout Close" src="../../assets/images/models/model1_cisd_breakout.png" /></p>
+<div class="image-caption">Figure 6.1: Model 1 Execution showing the candle body close above the blue CISD benchmark line.</div>
+
+<h3 id="how-it-works">How It Works:<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Identify the Benchmark Origin</strong>:<ul>
+<li>The indicator draws a <strong>Blue Horizontal Ray</strong> (for Bullish CISD) originating at the <code>Open</code> of the first down-close candle into the C2 low, or a <strong>Red Horizontal Ray</strong> (for Bearish CISD) originating at the <code>Open</code> of the first up-close candle into the C2 high.</li>
+</ul>
+</li>
+<li><strong>The Waiting Period</strong>:<ul>
+<li>Even if <code>C3</code> opens, if price is still trading below the benchmark line (for longs) or above the line (for shorts), <strong>do not enter yet</strong>. Orderflow has not flipped.</li>
+</ul>
+</li>
+<li><strong>The Exact Trigger</strong>:<ul>
+<li>Watch the 1-minute execution candle approaching the line.</li>
+<li>Wait for the candle timer to reach <code>0:00</code> and for the <strong>candle body to close strictly beyond the CISD line</strong>.</li>
+<li>A wick piercing the line does <strong>NOT</strong> count. The solid body must close past it.</li>
+</ul>
+</li>
+<li><strong>Order Execution</strong>:<ul>
+<li><strong>Variant A (Immediate Market Order)</strong>: The exact second the candle body closes across the line, click <strong>Buy/Sell Market</strong>.</li>
+<li><strong>Variant B (The Retest Dip)</strong>: Place a limit order on the CISD line. Frequently, the very next candle takes a quick 1–3 tick dip to test the line before launching.</li>
+</ul>
+</li>
+<li><strong>Stop Loss (SL)</strong>:<ul>
+<li>Placed 1–2 ticks beyond the extreme wick tip of <strong><code>C2</code></strong>.</li>
+</ul>
+</li>
+</ol>
+<p><a href="../../models/model_1_cisd_breakout/">Read Full Deep Dive on Model 1 →</a></p>
+<hr />
+<h2 id="3-model-2-the-50-t-spot-limit-entry-wholesale-discount-hunter">3. Model 2: The 50% T-Spot Limit Entry (Wholesale Discount Hunter)<a class="headerlink" href="#3-model-2-the-50-t-spot-limit-entry-wholesale-discount-hunter" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><em>"I refuse to chase green candles. I want to buy at a wholesale discount inside the manipulation wick."</em></p>
+</blockquote>
+<p><img alt="Model 2 T-Spot Equilibrium Limit" src="../../assets/images/models/model2_tspot_limit.png" /></p>
+<div class="image-caption">Figure 6.2: Model 2 Execution showing limit order fill inside the 50% Equilibrium Discount Box.</div>
+
+<h3 id="how-it-works_1">How It Works:<a class="headerlink" href="#how-it-works_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>The Candlestick Mechanics (AMD / Power of 3)</strong>:<ul>
+<li>95% of all expansion candles do not move straight to target from the open.</li>
+<li>A bullish candle first dips <em>below its open</em> to form a lower wick (Accumulation <span class="arithmatex">\(\rightarrow\)</span> Manipulation) before expanding upward (Distribution).</li>
+</ul>
+</li>
+<li><strong>Anatomy of the T-Spot Box</strong>:<ul>
+<li><strong>Upper Bound</strong>: The <strong>Opening price</strong> of the <code>C3</code> candle.</li>
+<li><strong>Lower Bound</strong>: The <strong>50% Equilibrium (midpoint)</strong> of the preceding <code>C2</code> candle (<code>[C2 High + C2 Low] / 2</code>), rendered as the dotted line.</li>
+</ul>
+</li>
+<li><strong>Order Execution</strong>:<ul>
+<li>As soon as <code>C3</code> opens and the green T-Spot box appears, place a <strong>Buy Limit Order</strong> sitting on the <strong>dotted line</strong> (or in the upper half of the box).</li>
+<li>As minute 1, 2, or 3 dips into discount, your limit order gets filled passively.</li>
+</ul>
+</li>
+<li><strong>Stop Loss (SL)</strong>:<ul>
+<li><strong>Tight Stop</strong>: 1–2 ticks below the dotted line (the bottom of the T-Spot box).</li>
+<li><strong>Structural Stop</strong>: Below the lowest wick of <strong><code>C2</code></strong>.</li>
+</ul>
+</li>
+</ol>
+<p><a href="../../models/model_2_tspot_limit/">Read Full Deep Dive on Model 2 →</a></p>
+<hr />
+<h2 id="4-model-3-the-micro-structure-sniper-dual-timeframe-precision">4. Model 3: The Micro-Structure Sniper (Dual Timeframe Precision)<a class="headerlink" href="#4-model-3-the-micro-structure-sniper-dual-timeframe-precision" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><em>"I want the wholesale discount of the T-Spot, but I want lower-timeframe confirmation before I click buy."</em></p>
+</blockquote>
+<p><img alt="Model 3 Micro Structure Sniper" src="../../assets/images/models/model3_micro_cisd.png" /></p>
+<div class="image-caption">Figure 6.3: Model 3 Execution showing a 1m sub-timeframe CISD break inside the 15m HTF T-Spot POI.</div>
+
+<h3 id="how-it-works_2">How It Works:<a class="headerlink" href="#how-it-works_2" title="Permanent link">&para;</a></h3>
+<ol>
+<li>You identify a setup on the <code>5m-1H</code> or <code>1m-15m</code> model.</li>
+<li>Price enters the shaded <strong>T-Spot Box / HTF Discount POI</strong>.</li>
+<li>Instead of placing a blind limit order, you zoom into the <strong>1-minute chart inside the box</strong>:<ul>
+<li>Watch for a 1-minute candle to take a tiny internal low (Micro C2).</li>
+<li>Watch for an immediate 1-minute green candle to close with displacement, printing a micro CISD break.</li>
+</ul>
+</li>
+<li><strong>Order Execution</strong>:<ul>
+<li>Enter Market Long on the close of that micro 1-minute green candle.</li>
+</ul>
+</li>
+<li><strong>Stop Loss (SL)</strong>:<ul>
+<li>Placed strictly below the micro swing low formed inside the box (often just 6–10 points on NQ!).</li>
+<li>Unlocks astronomical <strong>1:5 to 1:10+ Risk-to-Reward</strong>.</li>
+</ul>
+</li>
+</ol>
+<p><a href="../../models/model_3_micro_cisd/">Read Full Deep Dive on Model 3 →</a></p>
+<hr />
+<h2 id="5-model-4-the-c4-trend-continuation-entry-the-second-chance">5. Model 4: The C4 Trend Continuation Entry (The Second Chance)<a class="headerlink" href="#5-model-4-the-c4-trend-continuation-entry-the-second-chance" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><em>"I was away from my desk when C2 swept and C3 exploded. How do I get into this running trend without buying the top?"</em></p>
+</blockquote>
+<p><img alt="Model 4 C4 Trend Continuation" src="../../assets/images/models/model4_c4_continuation.png" /></p>
+<div class="image-caption">Figure 6.4: Model 4 Execution showing trend continuation pullback entry during the C4 expansion.</div>
+
+<h3 id="how-it-works_3">How It Works:<a class="headerlink" href="#how-it-works_3" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>The Mistake to Avoid</strong>:<ul>
+<li>When <code>C3</code> expands 60–100 points, retail traders panic and buy at the very top. Institutional algorithms then initiate a pullback, stopping them out.</li>
+</ul>
+</li>
+<li><strong>The Rule</strong>:<ul>
+<li>Never buy the top of <code>C3</code>. <strong>Wait for <code>C3</code> to close.</strong></li>
+</ul>
+</li>
+<li><strong>Anatomy of the <code>C4</code> Box</strong>:<ul>
+<li>When <code>C3</code> ends, the new candle <strong><code>C4</code></strong> opens.</li>
+<li>The indicator automatically draws the <strong><code>C4</code> T-Spot Box</strong>.</li>
+<li>The dotted line at the bottom is the <strong>50% midpoint of the giant <code>C3</code> candle</strong>.</li>
+</ul>
+</li>
+<li><strong>Order Execution</strong>:<ul>
+<li>Price retraces from the high and dips down into the <strong><code>C4</code> green box</strong>.</li>
+<li>Enter long inside the box (either via limit order or after a 1m green rejection candle).</li>
+</ul>
+</li>
+<li><strong>Targets</strong>:<ul>
+<li>Ride the continuation leg into the final macro standard deviation targets (<strong><code>-4.0</code> / <code>-4.5</code></strong>).</li>
+</ul>
+</li>
+</ol>
+<p><a href="../../models/model_4_c4_continuation/">Read Full Deep Dive on Model 4 →</a></p>
+<hr />
+<h2 id="6-master-comparison-matrix">6. Master Comparison Matrix<a class="headerlink" href="#6-master-comparison-matrix" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Model</th>
+<th style="text-align: left;">Primary Trigger</th>
+<th style="text-align: left;">Order Type</th>
+<th style="text-align: left;">Confirmation Level</th>
+<th style="text-align: left;">Typical RR</th>
+<th style="text-align: left;">Best Used When...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Model 1 (CISD Break)</strong></td>
+<td style="text-align: left;">Candle body closes past Blue/Red line</td>
+<td style="text-align: left;">Market on Close (or Retest Limit)</td>
+<td style="text-align: left;"><strong>Highest</strong> (Full Body Confirmation)</td>
+<td style="text-align: left;">1:2 to 1:3.5</td>
+<td style="text-align: left;">You want zero ambiguity and momentum proof.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Model 2 (T-Spot Limit)</strong></td>
+<td style="text-align: left;">Price dips into 50% Equilibrium</td>
+<td style="text-align: left;">Limit Order on Dotted Line</td>
+<td style="text-align: left;"><strong>Medium</strong> (Assumes HTF POI holds)</td>
+<td style="text-align: left;"><strong>1:4 to 1:8+</strong></td>
+<td style="text-align: left;">Clean trending days where you demand a discount.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Model 3 (Micro Sniper)</strong></td>
+<td style="text-align: left;">1m FVG / CISD inside T-Spot box</td>
+<td style="text-align: left;">Market on Micro Close</td>
+<td style="text-align: left;"><strong>High</strong> (Multi-timeframe alignment)</td>
+<td style="text-align: left;"><strong>1:5 to 1:10+</strong></td>
+<td style="text-align: left;">Scalping volatile index futures (NQ/ES).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Model 4 (C4 Continuation)</strong></td>
+<td style="text-align: left;">Pullback into C4 T-Spot box</td>
+<td style="text-align: left;">Limit or Market inside Box</td>
+<td style="text-align: left;"><strong>Medium</strong> (Trend Continuation)</td>
+<td style="text-align: left;">1:2 to 1:3</td>
+<td style="text-align: left;">You completely missed C2 and C3.</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.top", "navigation.instant", "navigation.tracking", "search.suggest", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>
