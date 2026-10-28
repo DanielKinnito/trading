@@ -23,11 +23,13 @@ To avoid chart clutter and conflicting signals, the indicator provides pre-confi
 
 | Trading Style / Preset | Higher Timeframe (Bias) | Middle Timeframe (Setup/C2) | Lower Timeframe (Execution/CISD) | Best Session | Typical Holding Time |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1m - 15m Model** | **1-Hour (1H)** | **15-Minute (15m)** | **1-Minute (1m)** | NY AM (08:30–11:00) | 15 – 45 minutes |
-| **1m - 1H Model** | **4-Hour (4H)** | **1-Hour (1H)** | **1-Minute (1m)** | London Open (02:00–05:00) | 30 – 90 minutes |
-| **5m - 1H Model** | **Daily (1D)** | **1-Hour (1H)** | **5-Minute (5m)** | London & NY AM | 1 – 3 hours |
-| **15m - 4H Model** | **Daily (1D)** | **4-Hour (4H)** | **15-Minute (15m)** | Full Trading Day | 4 – 8 hours |
-| **1H - Daily Model** | **Weekly (1W)** | **Daily (1D)** | **1-Hour (1H)** | Swing Trades | 2 – 5 days |
+| **1m - 15m Model (Fast Scalp)** | **1-Hour (1H)** | **15-Minute (15m)** | **1-Minute (1m)** | London Open & NY AM | 15 – 45 minutes |
+| **5m - 1H Model (Standard Day)** | **4-Hour (4H)** | **1-Hour (1H)** | **5-Minute (5m)** | London Open & NY AM | 1 – 3 hours |
+| **15m - 4H Model (Trend Run)** | **Daily (1D)** | **4-Hour (4H)** | **15-Minute (15m)** | Full Trading Day | 4 – 8 hours |
+| **1H - Daily Model (Macro Swing)**| **Weekly (1W)** | **Daily (1D)** | **1-Hour (1H)** | Swing Trades | 2 – 5 days |
+
+!!! warning "The 60:1 Ratio Warning (Why 1m - 1H is Not Recommended for Model 1)"
+    Never pair a 1-Hour setup candle (C2) with a 1-Minute chart for Model 1 closed-candle confirmation. By the time 60 minutes elapse for the 1H candle to close, the lower-timeframe move has already hit target liquidity and will retrace or reverse during C3! If you want 1-minute execution, use the **15-minute candle as C2** (`1m - 15m`).
 
 ---
 

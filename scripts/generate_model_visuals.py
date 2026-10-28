@@ -241,7 +241,7 @@ def generate_model_2_image():
     draw.text((375, 510), "DISCOUNT ZONE (<50%)", fill=GREEN_BORDER, font=get_font(11, bold=True))
     draw.text((375, 410), "PREMIUM ZONE (>50%)", fill=RED_BORDER, font=get_font(11, bold=True))
     
-    draw_dashboard_table(draw, 1010, 90, "EURUSD", "1m - 1H Model", "C3 T-Spot Fill")
+    draw_dashboard_table(draw, 1010, 90, "EURUSD", "1m - 15m Model", "C3 T-Spot Fill")
     img.save("docs/assets/images/models/model2_tspot_limit.png", "PNG")
 
 def generate_model_3_image():

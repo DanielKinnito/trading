@@ -354,7 +354,7 @@ def build_model_2_chart():
     d.text((620, tp_y - 18), "Take Profit Target (-2.0 Extension: 1.08450)", fill=TV_TSPOT_BORDER, font=get_font(11, bold=True))
     
     chart.draw_active_price_pill(1.08442, is_bull=True)
-    chart.draw_dashboard_widget(1040, 75, "EURUSD (Forex)", "1m - 1H Model", "C3 T-Spot Fill", "Limit Order Executed")
+    chart.draw_dashboard_widget(1040, 75, "EURUSD (Forex)", "1m - 15m Model", "C3 T-Spot Fill", "Limit Order Executed")
     chart.img.save("docs/assets/images/models/model2_tspot_limit.png", "PNG")
     print("Model 2 chart generated successfully!")
 

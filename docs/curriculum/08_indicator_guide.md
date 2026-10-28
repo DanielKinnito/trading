@@ -39,7 +39,7 @@ Double-click the indicator title on your chart (or click the Gear icon) to acces
 
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| **Preset Model** | Dropdown | `1m - 15m Model` | Pre-configured HTF and LTF resolutions. Set to `1m - 1H` for EURUSD/GBPUSD or `15m - 4H` for indices. |
+| **Preset Model** | Dropdown | `1m - 15m Model` | Pre-configured HTF and LTF resolutions. Set to `1m - 15m` for 1-minute execution (London Forex/NY Indices) or `5m - 1H` for standard 5m intraday. |
 | **Higher Timeframe** | Dropdown | `15` | Higher timeframe used to define C1, C2, and C3 candles. |
 | **Show C1-C4 Phases** | Checkbox | `true` | Plots labels `C1`, `C2`, `C3`, `C4` above and below the relevant candles. |
 | **Show CISD Line** | Checkbox | `true` | Plots the dynamic blue (bullish) or red (bearish) benchmark trigger line. |

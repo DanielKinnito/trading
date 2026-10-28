@@ -31,7 +31,7 @@ Below is the photorealistic chart layout showing the complete interface of Fract
 
 | Category | Input Name | Type | Options / Defaults | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Model Configuration** | `modelPreset` | Dropdown | `1m - 15m`, `1m - 1H`, `5m - 1H`, `15m - 4H`, `1H - Daily`, `Custom` | Automatically configures HTF resolution and display parameters. |
+| **Model Configuration** | `modelPreset` | Dropdown | `Auto`, `1m - 15m`, `2m - 20m`, `3m - 30m`, `5m - 1H`, `15m - 4H`, `30m - 6H`, `1H - 1D`, `Custom` | Automatically configures HTF resolution and display parameters based on native ratios. |
 | **Model Configuration** | `htfResolution` | Timeframe | `15`, `60`, `240`, `D` | Timeframe used to calculate C1-C4 cycles when Custom is selected. |
 | **Visual Markers** | `showPhases` | Boolean | `true` | Displays `C1`, `C2`, `C3`, `C4` text labels on the chart. |
 | **CISD Settings** | `showCisdLine` | Boolean | `true` | Draws dynamic blue/red benchmark trigger lines originating at opposing opens. |
