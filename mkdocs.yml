@@ -98,6 +98,7 @@ nav:
       - Session Liquidity Engine: indicators/liquidity_suite.md
       - Alert Setup Guide: indicators/alerts_guide.md
   - Cheatsheet & References:
+      - Daily Bias & Entry Masterclass: cheatsheet/daily_bias_masterclass.md
       - Session Times & DST Shifts: cheatsheet/sessions_and_rules.md
       - Timeframe Matrix: cheatsheet/timeframe_matrix.md
       - Common Mistakes & Invalidation: cheatsheet/common_mistakes.md
