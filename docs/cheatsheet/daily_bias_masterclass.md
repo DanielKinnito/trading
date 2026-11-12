@@ -178,3 +178,4 @@ Print this checklist or keep it open beside your trading station:
 - [ ] **7. Wait for LTF CISD**: A candle body MUST close across the benchmark line.
 - [ ] **8. Set Limits / Execute**: Enter via Model 1 or Model 2 with stop loss firmly placed beyond the sweep low.
 - [ ] **9. Take Profits Mechanically**: Scale out 50% at 50% Equilibrium, move stop to breakeven, and let the runner hit the PDH/PDL target.
+

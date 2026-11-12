@@ -94,6 +94,7 @@ nav:
   - Indicator Suite:
       - Installation & Quickstart: indicators/quickstart.md
       - Fractal Model Pro+ (v6): indicators/fractal_model.md
+      - Fractal Model + Daily Bias (All-in-One): indicators/fractal_model_daily_bias.md
       - HTF Candle Suite: indicators/htf_suite.md
       - Session Liquidity Engine: indicators/liquidity_suite.md
       - Alert Setup Guide: indicators/alerts_guide.md

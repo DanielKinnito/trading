@@ -17,7 +17,8 @@ This repository includes modular indicators located in [`scripts/indicators/`](h
 
 | Script | Filename | Purpose |
 | :--- | :--- | :--- |
-| **Fractal Model [Pro+]** | [`fractal_model.pine`](fractal_model.md) | Complete 1:1 recreation of the TTrades 4-phase fractal model with CISD and T-Spot. |
+| **Fractal Model + Daily Bias** | [`fractal_model_daily_bias.pine`](fractal_model_daily_bias.md) | **Recommended All-in-One**: Fractal model with mechanical Auto Daily Bias, Killzones ($\le$ 15m), and Daily/Weekly Opens. |
+| **Fractal Model [Pro+]** | [`fractal_model.pine`](fractal_model.md) | Core recreation of the TTrades 4-phase fractal model with CISD and T-Spot. |
 | **HTF Suite** | [`htf_suite.pine`](htf_suite.md) | Multi-timeframe candle projector with open lines and timers. |
 | **Liquidity Suite** | [`liquidity_suite.pine`](liquidity_suite.md) | Standalone session ranges (Asia, London, NY) and liquidity sweep detector. |
 | **Alerts Guide** | [Alerts Guide](alerts_guide.md) | How to configure zero-repaint audio and webhook alerts. |
