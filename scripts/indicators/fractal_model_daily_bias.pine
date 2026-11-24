@@ -8,8 +8,9 @@ showAlerts = input.bool(true, 'Alerts?', group = grpModel, inline = 'alerts', to
 showEarlyCisdAlerts = input.bool(false, 'Early CISD Alerts?', group = grpModel, inline = 'alerts', tooltip = "The global 'Alerts?' toggle above acts as a master switch. If it is OFF, Early CISD alerts will not fire even if this toggle is ON.")
 showHistory = input.int(1, 'History', minval = 0, maxval = 40, group = grpModel, tooltip = 'Number of past setups (valid or invalidated) to keep drawn on the chart. 0 = unlimited.')
 grpBias        = 'TTrades Daily Bias'
-biasMode       = input.string('Auto Daily', 'Bias Mode', options = ['Auto Daily', 'Manual', 'Neutral'], group = grpBias, tooltip = "Auto Daily: Automatically evaluates yesterday's daily candle mechanically using TTrades rules (Sweeps & Expansions).\nManual: Uses the manual setting below.\nNeutral: Disables bias filtering (shows all setups).")
+biasMode       = input.string('Auto Daily', 'Bias Mode', options = ['Auto Daily', 'Manual', 'Neutral'], group = grpBias, tooltip = "Auto Daily: Evaluates yesterday's daily candle mechanically using TTrades rules with dynamic intraday invalidation.\nManual: Uses the manual setting below.\nNeutral: Disables bias filtering.")
 biasManual     = input.string('Neutral', 'Manual Bias', options = ['Neutral', 'Bullish', 'Bearish'], group = grpBias, active = biasMode == 'Manual')
+filterAction   = input.string('Show All (Tag Bias in HUD)', 'Bias Filter Mode', options = ['Show All (Tag Bias in HUD)', 'Strictly Block Counter-Bias Setups'], group = grpBias, tooltip = "Show All (Recommended): Plots all valid fractal setups so you never miss a real move if bias flips, but clearly tags the bias on the HUD.\nStrictly Block: Only allows setups in the bias direction.")
 showBiasLevels = input.bool(true, 'Show PDH / PDL / Daily EQ Lines', group = grpBias, tooltip = 'Draws Previous Day High, Previous Day Low, and 50% Daily Equilibrium lines.')
 colPdh         = input.color(color.new(#ef5350, 20), 'PDH Color', group = grpBias, inline = 'pdh')
 colPdl         = input.color(color.new(#26a69a, 20), 'PDL Color', group = grpBias, inline = 'pdl')
@@ -285,23 +286,21 @@ var label                    htfInfoLbl           = na
 var label                    htf2InfoLbl          = na
 var label                    htf3InfoLbl          = na
 
-// Fetch previous closed daily bars using lookahead_off and [1]/[2] offsets for zero repainting
-d_open1  = request.security(syminfo.tickerid, "D", open[1],  lookahead = barmerge.lookahead_off)
-d_high1  = request.security(syminfo.tickerid, "D", high[1],  lookahead = barmerge.lookahead_off)
-d_low1   = request.security(syminfo.tickerid, "D", low[1],   lookahead = barmerge.lookahead_off)
-d_close1 = request.security(syminfo.tickerid, "D", close[1], lookahead = barmerge.lookahead_off)
-
-d_open2  = request.security(syminfo.tickerid, "D", open[2],  lookahead = barmerge.lookahead_off)
-d_high2  = request.security(syminfo.tickerid, "D", high[2],  lookahead = barmerge.lookahead_off)
-d_low2   = request.security(syminfo.tickerid, "D", low[2],   lookahead = barmerge.lookahead_off)
-d_close2 = request.security(syminfo.tickerid, "D", close[2], lookahead = barmerge.lookahead_off)
+// Single bundled security request for Daily bars (eliminates RE10110 execution timeout, zero repainting with [1]/[2] offsets)
+[d_open1, d_high1, d_low1, d_close1, d_open2, d_high2, d_low2, d_close2] = request.security(
+     syminfo.tickerid, "D", 
+     [open[1], high[1], low[1], close[1], open[2], high[2], low[2], close[2]], 
+     lookahead = barmerge.lookahead_off
+)
 
 f_calc_auto_daily_bias(float o1, float h1, float l1, float c1, float o2, float h2, float l2, float c2) =>
     string bias = "Neutral"
     if not na(c1) and not na(c2)
+        float eq1 = (h1 + l1) * 0.5
         // Scenario 1: Liquidity Sweep & Rejection (Turtle Soup / C2)
-        bool bull_sweep = l1 < l2 and c1 > l2
-        bool bear_sweep = h1 > h2 and c1 < h2
+        // Must sweep AND close with rejection in the healthy half
+        bool bull_sweep = l1 < l2 and c1 > l2 and c1 >= eq1
+        bool bear_sweep = h1 > h2 and c1 < h2 and c1 <= eq1
         // Scenario 2: Displacement Continuation
         bool bull_disp  = c1 > h2
         bool bear_disp  = c1 < l2
@@ -315,8 +314,7 @@ f_calc_auto_daily_bias(float o1, float h1, float l1, float c1, float o2, float h
         else if bear_disp and not bull_disp
             bias := "Bearish"
         else
-            // Scenario 3: Inside Day / Equilibrium Check
-            float eq1 = (h1 + l1) * 0.5
+            // Scenario 3: Inside Day / Range Midpoint Check
             if c1 > eq1 and c1 > o1
                 bias := "Bullish"
             else if c1 < eq1 and c1 < o1
@@ -326,10 +324,13 @@ f_calc_auto_daily_bias(float o1, float h1, float l1, float c1, float o2, float h
     bias
 
 autoDailyBias = f_calc_auto_daily_bias(d_open1, d_high1, d_low1, d_close1, d_open2, d_high2, d_low2, d_close2)
-activeBias    = biasMode == 'Auto Daily' ? autoDailyBias : biasMode == 'Manual' ? biasManual : 'Neutral'
+var float live_midnight_open = na
+var string activeBias        = "Neutral"
+var bool   biasInvalidated   = false
 
-allowBuy  = activeBias != 'Bearish'
-allowSell = activeBias != 'Bullish'
+// AllowBuy and AllowSell will be updated dynamically with intraday invalidation below
+var bool allowBuy  = true
+var bool allowSell = true
 
 var array<line>  bslLines   = array.new<line>()
 var array<label> bslLabels  = array.new<label>()
@@ -1211,38 +1212,64 @@ if show_kz and show_kz_names
 int  ny_mday    = hour(time, "America/New_York") * 60 + minute(time, "America/New_York")
 bool is_new_day = timeframe.isintraday and (ny_mday < ny_mday[1])
 
+// Performance optimization: only draw ephemeral lines on recent active days (prevents RE10110 timeout)
+bool is_recent_day = timeframe.isintraday and (timenow - time <= 86400000 * 3)
+
 if is_new_day
+    live_midnight_open := open
+    activeBias         := biasMode == 'Auto Daily' ? autoDailyBias : biasMode == 'Manual' ? biasManual : 'Neutral'
+    biasInvalidated    := false
     f_clear_past_daily_levels()
-    if show_day_vline
-        line.new(bar_index, low, bar_index, high + syminfo.mintick, extend = extend.both, color = col_day_vline, width = 1)
-    if show_mno
-        f_add_open_line(bar_index, open, "NY Midnight Open", col_mno, false)
-    if showBiasLevels and not na(d_high1) and not na(d_low1)
-        f_add_pd_line(bar_index, d_high1, "PDH", colPdh)
-        f_add_pd_line(bar_index, d_low1,  "PDL", colPdl)
-        f_add_pd_line(bar_index, (d_high1 + d_low1) * 0.5, "Daily EQ (50%)", colPdEq)
+    if is_recent_day
+        if show_day_vline
+            line.new(bar_index, low, bar_index, high + syminfo.mintick, extend = extend.both, color = col_day_vline, width = 1)
+        if show_mno
+            f_add_open_line(bar_index, open, "NY Midnight Open", col_mno, false)
+        if showBiasLevels and not na(d_high1) and not na(d_low1)
+            f_add_pd_line(bar_index, d_high1, "PDH", colPdh)
+            f_add_pd_line(bar_index, d_low1,  "PDL", colPdl)
+            f_add_pd_line(bar_index, (d_high1 + d_low1) * 0.5, "Daily EQ (50%)", colPdEq)
+
+// TTrades Dynamic Intraday Bias Invalidation (Midnight Open + PDL/PDH Breach)
+if biasMode == 'Auto Daily' and not biasInvalidated and not na(live_midnight_open)
+    if activeBias == "Bullish" and not na(d_low1)
+        // If price aggressively breaks below PDL and trades below Midnight Open, the Bullish bias is dead!
+        if close < d_low1 and close < live_midnight_open
+            activeBias      := "Bearish"
+            biasInvalidated := true
+    else if activeBias == "Bearish" and not na(d_high1)
+        // If price aggressively breaks above PDH and trades above Midnight Open, the Bearish bias is dead!
+        if close > d_high1 and close > live_midnight_open
+            activeBias      := "Bullish"
+            biasInvalidated := true
+
+// Model setup gating: Show All allows the trader to catch real moves if bias was off
+allowBuy  := filterAction == 'Show All (Tag Bias in HUD)' ? true : (activeBias != 'Bearish')
+allowSell := filterAction == 'Show All (Tag Bias in HUD)' ? true : (activeBias != 'Bullish')
 
 // New Week Detection
 bool is_new_week = ta.change(time("W")) != 0
 if is_new_week and show_wo
     f_clear_past_weekly_opens()
-    f_add_open_line(bar_index, open, "Weekly Open", col_wo, true)
+    if is_recent_day
+        f_add_open_line(bar_index, open, "Weekly Open", col_wo, true)
 
-// Extend open levels and PD lines with active price
-if array.size(live_open_levels) > 0
-    for i = 0 to array.size(live_open_levels) - 1
-        OpenLevel lv = array.get(live_open_levels, i)
-        line.set_x2(lv.ln, bar_index + 6)
-        if not na(lv.lb)
-            label.set_x(lv.lb, bar_index + 6)
+// Performance optimization: ONLY extend lines on the latest bar (prevents loop executing on 20,000 bars)
+if (barstate.islast or barstate.isrealtime)
+    if array.size(live_open_levels) > 0
+        for i = 0 to array.size(live_open_levels) - 1
+            OpenLevel lv = array.get(live_open_levels, i)
+            line.set_x2(lv.ln, bar_index + 6)
+            if not na(lv.lb)
+                label.set_x(lv.lb, bar_index + 6)
 
-if array.size(live_pd_lines) > 0
-    for i = 0 to array.size(live_pd_lines) - 1
-        line.set_x2(array.get(live_pd_lines, i), bar_index + 6)
+    if array.size(live_pd_lines) > 0
+        for i = 0 to array.size(live_pd_lines) - 1
+            line.set_x2(array.get(live_pd_lines, i), bar_index + 6)
 
-if array.size(live_pd_labels) > 0
-    for i = 0 to array.size(live_pd_labels) - 1
-        label.set_x(array.get(live_pd_labels, i), bar_index + 6)
+    if array.size(live_pd_labels) > 0
+        for i = 0 to array.size(live_pd_labels) - 1
+            label.set_x(array.get(live_pd_labels, i), bar_index + 6)
 
 //#region [PLOT]
 
@@ -1403,7 +1430,7 @@ if barstate.islast and tbl_show
 
     if tbl_show_bias
         biasColor = activeBias == 'Bullish' ? color.green : activeBias == 'Bearish' ? color.red : tbl_text_color
-        biasTag   = biasMode == 'Auto Daily' ? ' (Auto)' : biasMode == 'Manual' ? ' (Man)' : ''
+        biasTag   = biasMode == 'Auto Daily' ? (biasInvalidated ? ' (Flipped)' : ' (Auto)') : biasMode == 'Manual' ? ' (Man)' : ''
         table.cell(wm, 0, row, 'Bias : ' + activeBias + biasTag, text_color = biasColor, bgcolor = tbl_bg_color, text_size = tbl_sz, text_halign = text.align_center, text_font_family = font.family_default)
         row += 1
 

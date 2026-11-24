@@ -70,6 +70,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- |
 | **TTrades Daily Bias** | `biasMode` | Dropdown | `Auto Daily` | `Auto Daily` (calculated automatically), `Manual`, or `Neutral`. |
 | **TTrades Daily Bias** | `biasManual` | Dropdown | `Neutral` | Manual directional override when `Manual` mode is selected. |
+| **TTrades Daily Bias** | `filterAction` | Dropdown | `Show All (Tag Bias in HUD)` | `Show All` shows all setups so you never miss a real move; `Strictly Block` only plots setups aligned with bias. |
 | **TTrades Daily Bias** | `showBiasLevels` | Boolean | `true` | Plots dynamic PDH, PDL, and 50% Daily Equilibrium lines. |
 | **ICT Killzones** | `show_kz_shading` | Boolean | `true` | Enables background color shading for killzones. |
 | **ICT Killzones** | `kz_max_tf` | Integer | `15` | Shading and labels only show on charts $\le$ this number of minutes. |
