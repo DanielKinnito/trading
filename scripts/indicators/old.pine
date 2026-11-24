@@ -1,0 +1,271 @@
+//@version=6
+// ═══════════════════════════════════════════════════════════════════════════
+//  ICT TIME & LEVELS  —  the "always on" map (v2)
+//
+//  All in New York time:
+//    • Start-of-day line (00:00 NY)
+//    • Asian / London / NY AM / NY PM session shading (1h and lower only)
+//    • Asian High/Low, London High/Low  (cut off when swept)
+//    • NY Midnight Opening, two custom Opening prices (cut off when swept)
+//    • Weekly Open (stays until the next week)
+//
+//  Only the CURRENT day's levels are kept on the chart.
+// ═══════════════════════════════════════════════════════════════════════════
+indicator("ICT Time & Levels", shorttitle = "ICT Map", overlay = true, max_lines_count = 500, max_labels_count = 500)
+
+const string NY = "America/New_York"
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  INPUTS
+// ═══════════════════════════════════════════════════════════════════════════
+const string G_SESS = "Sessions (New York time)"
+const string G_LVL  = "Levels"
+const string G_DSP  = "Display"
+
+bool   i_show_asian  = input.bool(true, "Asian Range", group = G_SESS, inline = "as")
+string i_sess_asian  = input.session("2000-0000", "", group = G_SESS, inline = "as")
+color  i_col_asian   = input.color(color.new(#F44336, 88), "", group = G_SESS, inline = "as")
+
+bool   i_show_london = input.bool(true, "London Killzone", group = G_SESS, inline = "ld")
+string i_sess_london = input.session("0200-0500", "", group = G_SESS, inline = "ld")
+color  i_col_london  = input.color(color.new(#FF9800, 86), "", group = G_SESS, inline = "ld")
+
+bool   i_show_nyam   = input.bool(true, "NY AM Killzone", group = G_SESS, inline = "am")
+string i_sess_nyam   = input.session("0830-1100", "", group = G_SESS, inline = "am")
+color  i_col_nyam    = input.color(color.new(#4CAF50, 86), "", group = G_SESS, inline = "am")
+
+bool   i_show_nypm   = input.bool(true, "NY PM Killzone", group = G_SESS, inline = "pm")
+string i_sess_nypm   = input.session("1330-1600", "", group = G_SESS, inline = "pm")
+color  i_col_nypm    = input.color(color.new(#7E57C2, 86), "", group = G_SESS, inline = "pm")
+
+bool  i_show_vline = input.bool(true, "Start-of-day line (00:00 NY)", group = G_LVL, inline = "vl")
+color i_col_vline  = input.color(color.new(#FFC107, 30), "", group = G_LVL, inline = "vl")
+
+bool  i_show_arl   = input.bool(true, "Asian Range high / low", group = G_LVL, inline = "ar")
+color i_col_arl    = input.color(#78909C, "", group = G_LVL, inline = "ar")
+
+bool  i_show_lrl   = input.bool(true, "London high / low", group = G_LVL, inline = "lr")
+color i_col_lrl    = input.color(#FF9800, "", group = G_LVL, inline = "lr")
+
+bool  i_show_mno   = input.bool(true, "NY Midnight Opening", group = G_LVL, inline = "mn")
+color i_col_mno    = input.color(#42A5F5, "", group = G_LVL, inline = "mn")
+
+bool  i_show_wo    = input.bool(true, "Weekly Open", group = G_LVL, inline = "wo")
+color i_col_wo     = input.color(#0044FF, "", group = G_LVL, inline = "wo")
+
+bool  i_show_o1    = input.bool(true, "Opening price 1 at", group = G_LVL, inline = "o1")
+int   i_o1_h       = input.int(8, "", minval = 0, maxval = 23, group = G_LVL, inline = "o1")
+int   i_o1_m       = input.int(30, ":", minval = 0, maxval = 59, group = G_LVL, inline = "o1")
+color i_col_o1     = input.color(#9E9E9E, "", group = G_LVL, inline = "o1")
+
+bool  i_show_o2    = input.bool(true, "Opening price 2 at", group = G_LVL, inline = "o2")
+int   i_o2_h       = input.int(9, "", minval = 0, maxval = 23, group = G_LVL, inline = "o2")
+int   i_o2_m       = input.int(30, ":", minval = 0, maxval = 59, group = G_LVL, inline = "o2")
+color i_col_o2     = input.color(#9E9E9E, "", group = G_LVL, inline = "o2")
+
+int   i_sess_max_tf = input.int(60, "Hide session shading above timeframe (minutes)", minval = 1, group = G_DSP, tooltip = "60 = shading and session names show up to the 1h chart and disappear on 2h, 4h, 1D, 1W...")
+bool  i_show_lbl   = input.bool(true, "Show level labels", group = G_DSP)
+bool  i_show_slbl  = input.bool(true, "Show session name labels", group = G_DSP)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TIME HELPERS
+// ═══════════════════════════════════════════════════════════════════════════
+bool  intraday = timeframe.isintraday
+int   mday     = hour(time, NY) * 60 + minute(time, NY)     // minutes since NY midnight
+float tf_min   = timeframe.in_seconds() / 60.0
+
+bool new_day   = intraday and mday < mday[1]                 // wraps past 00:00 NY
+bool show_sess = intraday and tf_min <= i_sess_max_tf
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SESSIONS  (background shading + names)
+// ═══════════════════════════════════════════════════════════════════════════
+bool in_asian  = intraday and not na(time(timeframe.period, i_sess_asian,  NY))
+bool in_london = intraday and not na(time(timeframe.period, i_sess_london, NY))
+bool in_nyam   = intraday and not na(time(timeframe.period, i_sess_nyam,   NY))
+bool in_nypm   = intraday and not na(time(timeframe.period, i_sess_nypm,   NY))
+
+bgcolor(show_sess and i_show_asian  and in_asian  ? i_col_asian  : na, title = "Asian Range")
+bgcolor(show_sess and i_show_london and in_london ? i_col_london : na, title = "London Killzone")
+bgcolor(show_sess and i_show_nyam   and in_nyam   ? i_col_nyam   : na, title = "NY AM Killzone")
+bgcolor(show_sess and i_show_nypm   and in_nypm   ? i_col_nypm   : na, title = "NY PM Killzone")
+
+f_sess_lbl(bool start, string txt, color c) =>
+    if start
+        label.new(bar_index, high, txt, yloc = yloc.abovebar, style = label.style_none, textcolor = color.new(c, 0), size = size.small)
+    true
+
+if i_show_slbl and show_sess
+    f_sess_lbl(i_show_asian  and in_asian  and not in_asian[1],  "Asian Range",     i_col_asian)
+    f_sess_lbl(i_show_london and in_london and not in_london[1], "London Killzone", i_col_london)
+    f_sess_lbl(i_show_nyam   and in_nyam   and not in_nyam[1],   "NY AM Killzone",  i_col_nyam)
+    f_sess_lbl(i_show_nypm   and in_nypm   and not in_nypm[1],   "NY PM Killzone",  i_col_nypm)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  LEVEL STRUCTURE & MANAGEMENT
+//  sweep mode: 0 = never swept, 1 = high (swept when price trades above),
+//              2 = low (swept when price trades below), 3 = opening price (touched)
+// ═══════════════════════════════════════════════════════════════════════════
+type Lvl
+    line   ln
+    label  lb
+    float  price
+    int    start_bar
+    int    mode
+    bool   keep
+    bool   swept
+    string name
+
+var array<Lvl> live = array.new<Lvl>()
+
+// Create a level: line starts at x1, extends 6 bars past the current bar, label on the right
+f_add_level(int x1, float y, string txt, color c, int mode = 0, bool keep = false) =>
+    line  ln = line.new(x1, y, bar_index + 6, y, color = c, style = line.style_dotted, width = 1)
+    label lb = na
+    if i_show_lbl
+        lb := label.new(bar_index + 6, y, txt, style = label.style_label_left, color = color.new(c, 100), textcolor = c, size = size.tiny)
+    array.push(live, Lvl.new(ln, lb, y, x1, mode, keep, false, txt))
+    true
+
+// Delete every level except the ones marked keep (Weekly Open)
+f_clear_day() =>
+    if array.size(live) > 0
+        for i = array.size(live) - 1 to 0
+            Lvl lv = array.get(live, i)
+            if not lv.keep
+                line.delete(lv.ln)
+                if not na(lv.lb)
+                    label.delete(lv.lb)
+                array.remove(live, i)
+    true
+
+// Delete levels with a given name (used to replace the Weekly Open)
+f_clear_name(string nm) =>
+    if array.size(live) > 0
+        for i = array.size(live) - 1 to 0
+            Lvl lv = array.get(live, i)
+            if lv.name == nm
+                line.delete(lv.ln)
+                if not na(lv.lb)
+                    label.delete(lv.lb)
+                array.remove(live, i)
+    true
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  NEW DAY: wipe yesterday's levels first, then draw the new day's
+// ═══════════════════════════════════════════════════════════════════════════
+if new_day
+    f_clear_day()
+
+// ── Asian Range tracking ─────────────────────────────────────────────────
+var float ar_hi     = na
+var float ar_lo     = na
+var int   ar_hi_bar = na
+var int   ar_lo_bar = na
+
+bool asian_start = in_asian and not in_asian[1]
+bool asian_end   = not in_asian and in_asian[1]
+
+if in_asian
+    if asian_start or na(ar_hi)
+        ar_hi     := high
+        ar_lo     := low
+        ar_hi_bar := bar_index
+        ar_lo_bar := bar_index
+    else
+        if high > ar_hi
+            ar_hi     := high
+            ar_hi_bar := bar_index
+        if low < ar_lo
+            ar_lo     := low
+            ar_lo_bar := bar_index
+
+if asian_end and i_show_arl and not na(ar_hi)
+    f_add_level(ar_hi_bar, ar_hi, "Asian Range High", i_col_arl, 1)
+    f_add_level(ar_lo_bar, ar_lo, "Asian Range Low",  i_col_arl, 2)
+
+// ── London tracking ──────────────────────────────────────────────────────
+var float ld_hi     = na
+var float ld_lo     = na
+var int   ld_hi_bar = na
+var int   ld_lo_bar = na
+
+bool london_start = in_london and not in_london[1]
+bool london_end   = not in_london and in_london[1]
+
+if in_london
+    if london_start or na(ld_hi)
+        ld_hi     := high
+        ld_lo     := low
+        ld_hi_bar := bar_index
+        ld_lo_bar := bar_index
+    else
+        if high > ld_hi
+            ld_hi     := high
+            ld_hi_bar := bar_index
+        if low < ld_lo
+            ld_lo     := low
+            ld_lo_bar := bar_index
+
+if london_end and i_show_lrl and not na(ld_hi)
+    f_add_level(ld_hi_bar, ld_hi, "London High", i_col_lrl, 1)
+    f_add_level(ld_lo_bar, ld_lo, "London Low",  i_col_lrl, 2)
+
+// ── New day: vertical line + midnight open ───────────────────────────────
+if new_day
+    if i_show_vline
+        line.new(bar_index, low, bar_index, high + syminfo.mintick, extend = extend.both, color = i_col_vline, width = 1)
+    if i_show_mno
+        f_add_level(bar_index, open, "NY Midnight Opening", i_col_mno, 0)
+
+// ── Weekly Open (works on any timeframe, stays until next week) ──────────
+bool is_new_week = ta.change(time("W")) != 0
+if is_new_week and i_show_wo
+    f_clear_name("W.Open")
+    f_add_level(bar_index, open, "W.Open", i_col_wo, 0, true)
+
+// ── 8:30 / 9:30 style opening prices ─────────────────────────────────────
+int  t1    = i_o1_h * 60 + i_o1_m
+int  t2    = i_o2_h * 60 + i_o2_m
+bool is_o1 = intraday and mday <= t1 and mday + tf_min > t1
+bool is_o2 = intraday and mday <= t2 and mday + tf_min > t2
+
+if is_o1 and i_show_o1
+    f_add_level(bar_index, open, str.tostring(i_o1_h) + ":" + str.tostring(i_o1_m, "00") + " Opening", i_col_o1, 3)
+if is_o2 and i_show_o2
+    f_add_level(bar_index, open, str.tostring(i_o2_h) + ":" + str.tostring(i_o2_m, "00") + " Opening", i_col_o2, 3)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  UPDATE: extend active lines, cut swept ones, flip swept labels to the left
+//  (runs last so levels created this bar are handled too)
+// ═══════════════════════════════════════════════════════════════════════════
+if array.size(live) > 0
+    for i = array.size(live) - 1 to 0
+        Lvl lv = array.get(live, i)
+
+        if not lv.swept
+            bool hit = false
+            if bar_index > lv.start_bar
+                if lv.mode == 1
+                    hit := high >= lv.price
+                else if lv.mode == 2
+                    hit := low <= lv.price
+                else if lv.mode == 3
+                    hit := high >= lv.price and low <= lv.price
+
+            if hit
+                // Freeze the line here; move the label to the left of the line origin
+                lv.swept := true
+                line.set_x2(lv.ln, bar_index)
+                if not na(lv.lb)
+                    label.set_x(lv.lb, lv.start_bar)
+                    label.set_style(lv.lb, label.style_label_right)
+            else
+                // Still active: keep the line and the right-hand label moving forward
+                line.set_x2(lv.ln, bar_index + 6)
+                if not na(lv.lb)
+                    label.set_x(lv.lb, bar_index + 6)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  END OF SCRIPT
+// ═══════════════════════════════════════════════════════════════════════════
